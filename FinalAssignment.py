@@ -103,21 +103,46 @@ def line_plot(data, label1, label2):
     plt.savefig("lineplot.png")#Saving Lineplot
     plt.show() 
     
+    
+def pop_growth_mean():   
+  """
   
-#Passing file to gat_data function and filtering countries and names from filter_bar_data function  
-population_data, population_data1=get_data("Population_growth.csv")
+  Function to calculate the mean of population growth for 5 countries
+
+  """
+  dataf1,dataf2 =get_data("C:/Users/user/Desktop/Assignment2/Population_growth.csv")
+  data=dataf1.set_index('Country Name')
+  transpose=data.transpose()
+  #Droping unneccessary columns
+  transpose=transpose.drop(index='Indicator Code')
+  transpose=transpose.drop(index='Indicator Name')  
+  transpose=transpose.drop(index='Country Code')
+  clean_data=transpose.fillna(0)
+  mean=clean_data[["Brazil", "China", "Canada", "Denmark", "Finland", "Italy"]].mean()
+  return mean
+    
+  
+#Reading data from csv file to data frames using the function get_data 
+population_data, population_data1=get_data("C:/Users/user/Desktop/Assignment2/Population_growth.csv")
 population_data=filter_bar_data(population_data)
-Arable_data, Arable_data1=get_data("Arable land.csv")
+Arable_data, Arable_data1=get_data("C:/Users/user/Desktop/Assignment2/Arable land.csv")
 Arable_data=filter_bar_data(Arable_data)    
-CO2_data, CO2_data1=get_data("CO2_emission.csv")
+CO2_data, CO2_data1=get_data("C:/Users/user/Desktop/Assignment2/CO2_emission.csv")
 CO2_data=filter_line_plot(CO2_data)
-Cereal_data, Cereal_data1=get_data("cereal.csv")
+Cereal_data, Cereal_data1=get_data("C:/Users/user/Desktop/Assignment2/cereal.csv")
 Cereal_data=filter_line_plot(Cereal_data)
 
-#Plotting barplot and line plot
+#Plotting barplot for Population growth and Arable land
 barplot(population_data, "Total population Growth",  "Population Growth")
 barplot(Arable_data, "Total Land", " Arable land")
+#Plotting line plot for CO2 Emission and Cereal Yield
 line_plot(CO2_data, "CO2 Emission ", "CO2 Emission")
 line_plot(Cereal_data, "Cereal yield", " Cereal Yield")
+
+#Statistical function for returning mean for population growth data
+pop_mean=pop_growth_mean()
+print(pop_mean)  
+##Writing data to csv file
+pop_mean=pop_mean.to_csv("mean_of_population_growth.csv")
     
     
